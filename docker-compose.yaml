@@ -1,0 +1,42 @@
+version: '3'
+services:
+  nginx:
+    build:
+        dockerfile: ./docker/nginx.dockerfile
+        context: .
+    container_name: my-nginx
+    image: armandoss/my-nginx
+    restart: always
+    ports:
+      - 80:80
+    depends_on: 
+      - "node1"
+      - "node2"
+      - "node3"  
+  node1:
+      build:
+          dockerfile: ./docker/app/app.dockerfile
+          context: .
+      image: armandoss/app-servernode
+      container_name: app-servernode-1
+      ports:
+          - "8081:8080"
+      command: bash -c "export MESSAGE=PRIMEIRO && node /usr/src/app/index"
+  node2:
+      build:
+          dockerfile: ./docker/app.dockerfile
+          context: .
+      image: armandoss/app-servernode
+      container_name: app-servernode-2
+      ports:
+          - "8082:8080"
+      command: bash -c "export MESSAGE=SEGUNDO && node /usr/src/app/index"
+  node3:
+      build:
+          dockerfile: ./docker/app.dockerfile
+          context: .
+      image: armandoss/app-servernode
+      container_name: app-servernode-3
+      ports:
+          - "8083:8080"
+      command: bash -c "export MESSAGE=TERCEIRO && node /usr/src/app/index"
